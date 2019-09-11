@@ -12,7 +12,9 @@ let api = axios.create({
 export default new Vuex.Store({
   state: {
     cars: [],
-    activeCar: {}
+    activeCar: {},
+    houses: [],
+    activeHouse: {}
   },
   mutations: {
     setCars(state, payload) {
@@ -20,6 +22,12 @@ export default new Vuex.Store({
     },
     setActiveCar(state, payload) {
       state.activeCar = payload
+    },
+    setHouses(state, payload) {
+      state.houses = payload
+    },
+    setActiveHouse(state, payload) {
+      state.activeHouse = payload
     }
   },
   actions: {
@@ -31,14 +39,28 @@ export default new Vuex.Store({
         console.error(error)
       }
     },
+    async getHouses({ commit, dispatch }) {
+      try {
+        let res = await api.get('houses')
+        commit('setHouses', res.data.data)
+      } catch (error) {
+        console.error(error)
+      }
+    },
     async getCarById({ commit, dispatch }, payload) {
       try {
         let res = await api.get(`/cars/${payload.carId}`)
         commit('setActiveCar', res.data.data)
-
       } catch (error) {
         console.error(error)
-
+      }
+    },
+    async getHouseById({ commit, dispatch }, payload) {
+      try {
+        let res = await api.get(`/houses/${payload.houseId}`)
+        commit('setActiveHouse', res.data.data)
+      } catch (error) {
+        console.error(error)
       }
     },
     async addCar({ dispatch }, payload) {
@@ -47,7 +69,14 @@ export default new Vuex.Store({
         dispatch('getCars')
       } catch (error) {
         console.error(error)
-
+      }
+    },
+    async addHouse({ dispatch }, payload) {
+      try {
+        let res = await api.post('/houses', payload)
+        dispatch('getHouses')
+      } catch (error) {
+        console.error(error)
       }
     },
     async delortCar({ dispatch }, payload) {
@@ -56,6 +85,14 @@ export default new Vuex.Store({
         dispatch('getCars')
         //NOTE this is coming from the import statement at the top
         router.push({ name: 'cars' })
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async delortHouse({ dispatch }, payload) {
+      try {
+        let res = await api.delete('/houses/' + payload)
+        router.push({ name: 'houses' })
       } catch (error) {
         console.error(error)
       }

@@ -12,6 +12,13 @@ export default new Router({
       component: Cars
     },
     {
+      path: '/houses',
+      name: 'houses',
+      component: function () {
+        return import(/* webpackChunkName: "houses" */ './views/Houses.vue')
+      }
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting
@@ -29,6 +36,13 @@ export default new Router({
       // which is lazy-loaded when the route is visited.
       component: function () {
         return import(/* webpackChunkName: "car" */ './views/Car.vue')
+      }
+    },
+    {
+      path: '/houses/:houseId',
+      name: 'house',
+      component: function () {
+        return import(/* webpackChunkName: "house" */ './views/House.vue')
       }
     },
     {
